@@ -76,6 +76,8 @@ let info = await dashsight.getInstantBalance(addr);
 console.log(info);
 ```
 
+Example output:
+
 ```json
 {
   "addrStr": "Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -89,7 +91,84 @@ correctly calculate balances adjusted for Instant Send.
 
 ## `dashsight.getTx(txIdHex)`
 
+Get transaction details by its (hex-encoded) ID.
+
+```js
+// Base58Check-encoded Pay to Pubkey Hash (p2pkh)
+let txid = `f92e66edc9c8da41de71073ef08d62c56f8752a3f4e29ced6c515e0b1c074a38`;
+
+let tx = await dashsight.getTx(txid);
+
+console.log(tx);
+```
+
+Example output:
+
+```json
+{
+  "txid": "f92e66edc9c8da41de71073ef08d62c56f8752a3f4e29ced6c515e0b1c074a38",
+  "version": 2,
+  "locktime": 1699123,
+  "vin": [
+    {
+      "txid": "346035a9ab38c84eb13964aff45e7a4d363f467fb755be0ffac6dfb2f80f63dc",
+      "vout": 1,
+      "sequence": 4294967294,
+      "n": 0,
+      "scriptSig": {
+        "hex": "483045022100f8f5feb0a533f8509cb6cbb0b046dc1136adaab378e9a5151dc4fe633dd064710220157b08ddf7557b5e69c6128989a7da7fccadd28836f0fb99860d730f4320681a0121038c681a93929bb4fe5d39025d42f711abab49a247f8312943d3021c6eb3231c82",
+        "asm": "3045022100f8f5feb0a533f8509cb6cbb0b046dc1136adaab378e9a5151dc4fe633dd064710220157b08ddf7557b5e69c6128989a7da7fccadd28836f0fb99860d730f4320681a[ALL] 038c681a93929bb4fe5d39025d42f711abab49a247f8312943d3021c6eb3231c82"
+      },
+      "addr": "Xhn6eTCwW94vhVifhshyTeihvTa7LcatiM",
+      "valueSat": 100001,
+      "value": 0.00100001,
+      "doubleSpentTxID": null
+    }
+  ],
+  "vout": [
+    {
+      "value": "0.00099809",
+      "n": 0,
+      "scriptPubKey": {
+        "hex": "76a91473640d816ff4161d8c881da78983903bf9eba2d988ac",
+        "asm": "OP_DUP OP_HASH160 73640d816ff4161d8c881da78983903bf9eba2d9 OP_EQUALVERIFY OP_CHECKSIG",
+        "addresses": ["XmCyQ6qARLWXap74QubFMunngoiiA1QgCL"],
+        "type": "pubkeyhash"
+      },
+      "spentTxId": null,
+      "spentIndex": null,
+      "spentHeight": null
+    }
+  ],
+  "blockheight": -1,
+  "confirmations": 0,
+  "time": 1657004174,
+  "valueOut": 0.00099809,
+  "size": 192,
+  "valueIn": 0.00100001,
+  "fees": 0.00000192,
+  "txlock": true
+}
+```
+
 ## `dashsight.getTxs(addrStr)`
+
+Get all transaction associated with an address.
+
+```js
+// Base58Check-encoded Pay to Pubkey Hash (p2pkh)
+let addr = `Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`;
+
+let txs = await dashsight.getTxs(addr);
+
+console.log(txs);
+```
+
+Example output:
+
+```json
+[ ]
+```
 
 ## `dashsight.getUtxos(addrStr)`
 
@@ -120,3 +199,5 @@ console.log(utxos);
 ```
 
 ## `dashsight.instantSend(txHex)`
+
+TODO

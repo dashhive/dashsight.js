@@ -84,16 +84,18 @@
  * @property {Number} version
  * @property {Array<InsightTxVin>} vin
  * @property {Array<InsightTxVout>} vout
+ * @property {Number} fees
  */
 
 /**
  * @typedef {Object} InsightTxVin
- * @property {String} addr
+ * @property {String} addr - base58check-encoded address
+ * @property {Number} value - float value in DASH
  */
 
 /**
  * @typedef {Object} InsightTxVout
- * @property {String} value
+ * @property {String} value - string value in DASH
  * @property {Object} scriptPubKey
  * @property {Array<String>} scriptPubKey.addresses
  */
