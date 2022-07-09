@@ -233,14 +233,19 @@ Example output:
 
 ## `dashsight.instantSend(txHex)`
 
+Send a signed transaction to Dash's Insight API for relay and broadcast to the
+Dash network.
+
+See the **full example** in [./examples/mimi-send.js](/examples/mimi-send.js).
+
 ```js
 let Dashcore = require("@dashevo/dashcore-lib");
 let Transaction = Dashcore.Transaction;
 
-let tx = new Transaction().from(dashcoreUtxos);
+let tx = new Transaction().from(coreUtxos);
 tx.to(paymentAddr, duffs);
-tx.change(changeAddr, duffs);
-tx.sign(wif);
+tx.change(changeAddr);
+tx.sign(privateKeys);
 
 let txHex = tx.serialize();
 
@@ -250,6 +255,8 @@ console.log(result);
 ```
 
 Example transaction hex:
+
+(inspectable at <https://live.blockcypher.com/dash/decodetx/>)
 
 ```txt
 030000000187ab81e88e2c19ca354f33f14d5b43b60d171ac851eb97dddd271b510cadbdb0000000
@@ -264,6 +271,3 @@ Example output:
 ```json
 { "txid": "0f90cf5e03e8b8f8c4468f60fc8328cfcd5617fc2163f485fabfd227c692bf93" }
 ```
-
-Note: the format of `utxo` as returned from Dash's Insight API is fundamentally
-different from the Dashcore utxo and cannot be transformed by simple means.
