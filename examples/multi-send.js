@@ -2,10 +2,10 @@
 "use strict";
 
 /**
- * @overview Multiple-Input, Full Balance Transfer
+ * @overview Multiple-Input, Multiple Output Send
  *
- * A typical example of transferring a balance from multiple UTXOs,
- * owned by multiple keys, to a single payment address.
+ * An example of making payments to multiple addresses,
+ * from multiple UTXOs, owned by multiple keys.
  */
 
 require("dotenv").config({ path: ".env" });
@@ -24,33 +24,42 @@ let Transaction = Dashcore.Transaction;
 
 // the cost of a typical single input, single output tx
 const BASE_FEE = 192;
-const DUST = 2000;
+
+// ins
+//XmpcA2iWGL69vdys8jidRvNapSFc1cw5Co;
+//XfgZetFiNZDzGZXksMgbvWcyoz87hs7L5T;
+
+// outs
+//XxtRtjzhHLiVqjyTxaPVAhvUbYFfBUtNwf;
+//XegAvRKfiPRLge3wQiuSwCpooqyzo7Zm51;
 
 async function main() {
   // Spendable UTXOs from two private keys
   let coreUtxos = [
     {
-      address: "Xf7vuu6R1ir7kk8hShnXdpir3MKJ5bWpFs",
+      address: "XdMjvLrgMpoTjhPnQ2YfWzLXxWLATofqLX",
       outputIndex: 0,
-      satoshis: 99809,
-      script: "76a914309f24907c81d7e56169b1ab5f86e89aba0f808488ac",
-      txId: "966343979b762c30431b38654b70e8a5a43c394a9c67f80862cfb992f8955d16",
-    },
-    {
-      address: "XmKzeKbSKtP6Ld3XpWf1S7a6hxRFmXvtqu",
-      outputIndex: 0,
-      satoshis: 99809,
-      script: "76a91474b8010010c29e778dae98f48a155a379554190088ac",
-      txId: "57d573d612b826c8d5729406aba4b18cc153bb0264e4211b4f7543eb55b28949",
+      satoshis: 199278,
+      script: "76a9141d4b89eda7eaf41672884296159a7fc57b59d97088ac",
+      txId: "57fe8d4ae28bc5e82aeef5e56863f9d4a9cca1697caf7ef48bc475215b8cb1c5",
     },
   ];
 
   // The destination address
-  let paymentAddr = "XdMjvLrgMpoTjhPnQ2YfWzLXxWLATofqLX";
+  let payments = [
+    {
+      address: "XmpcA2iWGL69vdys8jidRvNapSFc1cw5Co",
+      value: 0, // remainder
+    },
+    {
+      address: "XfgZetFiNZDzGZXksMgbvWcyoz87hs7L5T",
+      value: 0, // remainder
+    },
+  ];
 
   // The change address
   // (required as a safeguard, but we won't generate change here)
-  let changeAddr = paymentAddr;
+  let changeAddr = "XxtRtjzhHLiVqjyTxaPVAhvUbYFfBUtNwf";
 
   // The full transferable balance
   let availableDuffs = coreUtxos.reduce(function (total, utxo) {
@@ -58,11 +67,8 @@ async function main() {
   }, 0);
 
   // Each utxo to be spent must be signed by its corresponds key
-  let keys = [
-    "<private-key-wif-for-addr-1-goes-here>",
-    "<private-key-wif-for-addr-2-goes-here>",
-  ];
-  throw new Error("change the example to use your keys (and remove the error)");
+  let Fs = require("fs").promises;
+  let keys = [(await Fs.readFile("./source-1.wif", "utf8")).trim()];
 
   // Note: Cyclic Fee Estimation
   //
@@ -75,23 +81,10 @@ async function main() {
   let tx;
   for (;;) {
     let spendableDuffs = availableDuffs - fee;
-    if (spendableDuffs < DUST) {
-      throw new Error(
-        `dust: inputs total '${availableDuffs}', which is considered non-spendable "dust"`,
-      );
-    }
-
-    let payments = [
-      {
-        address: paymentAddr,
-        satoshis: spendableDuffs,
-      },
-    ];
-
     //@ts-ignore - the constructor can, in fact, take 0 arguments
     tx = new Transaction();
     tx.from(coreUtxos);
-    tx.to(payments);
+    tx.to(paymentAddr, spendableDuffs);
     tx.change(changeAddr);
     tx.fee(fee);
     tx.sign(keys);
@@ -106,11 +99,9 @@ async function main() {
   }
 
   let txHex = tx.serialize();
-  console.info();
-  console.info(
-    "Transaction Hex: (inspect at https://live.blockcypher.com/dash/decodetx/)",
-  );
+  console.info("Transaction Hex:");
   console.info(txHex);
+  console.info("(inspect at https://live.blockcypher.com/dash/decodetx/)");
   console.info();
 
   let result = await dashsight.instantSend(txHex);
