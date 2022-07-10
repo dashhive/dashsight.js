@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 "use strict";
 
+/**
+ * @overview Multiple-Input, Full Balance Transfer
+ *
+ * A typical example of transferring a balance from multiple UTXOs,
+ * owned by multiple keys, to a single payment address.
+ */
+
 require("dotenv").config({ path: ".env" });
 
 let dashsightBaseUrl =

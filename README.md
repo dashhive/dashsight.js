@@ -236,7 +236,11 @@ Example output:
 Send a signed transaction to Dash's Insight API for relay and broadcast to the
 Dash network.
 
-See the **full example** in [./examples/mimi-send.js](/examples/mimi-send.js).
+See **full examples** in:
+
+- [./examples/balance-transfer.js](/examples/balance-transfer.js).
+
+Abridged Example:
 
 ```js
 let Dashcore = require("@dashevo/dashcore-lib");
