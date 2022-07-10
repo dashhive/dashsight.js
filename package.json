@@ -1,6 +1,6 @@
 {
   "name": "dashsight",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "SDK for Dash's flavor of the Insight API",
   "main": "index.js",
   "scripts": {
@@ -12,8 +12,7 @@
     "bin",
     "lib",
     "types.js",
-    "typings",
-    "ws"
+    "typings"
   ],
   "bin": {
     "dashsight": "bin/create-tx.js"
