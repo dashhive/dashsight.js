@@ -73,10 +73,17 @@ async function main() {
   let tx;
   for (;;) {
     let spendableDuffs = availableDuffs - fee;
+    let payments = [
+      {
+        address: paymentAddr,
+        satoshis: spendableDuffs,
+      },
+    ];
+
     //@ts-ignore - the constructor can, in fact, take 0 arguments
     tx = new Transaction();
     tx.from(coreUtxos);
-    tx.to(paymentAddr, spendableDuffs);
+    tx.to(payments);
     tx.change(changeAddr);
     tx.fee(fee);
     tx.sign(keys);
