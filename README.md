@@ -247,8 +247,28 @@ Abridged Example:
 let Dashcore = require("@dashevo/dashcore-lib");
 let Transaction = Dashcore.Transaction;
 
-let tx = new Transaction().from(coreUtxos);
-tx.to(paymentAddr, duffs);
+let coreUtxos = [
+  {
+    address: "XmCyQ6qARLWXap74QubFMunngoiiA1QgCL",
+    outputIndex: 0,
+    satoshis: 99809,
+    script: "76a91473640d816ff4161d8c881da78983903bf9eba2d988ac",
+    txId: "f92e66edc9c8da41de71073ef08d62c56f8752a3f4e29ced6c515e0b1c074a38",
+  },
+];
+
+let payments = [
+  { address: `Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`, satoshis: 10000000 },
+];
+
+let privateKeys = [
+  // keys that correspond to the available utxos
+  "YOUR_KEY_HERE",
+];
+
+let tx = new Transaction();
+tx.from(coreUtxos);
+tx.to(payments);
 tx.change(changeAddr);
 tx.sign(privateKeys);
 
@@ -261,7 +281,7 @@ console.log(result);
 
 Example transaction hex:
 
-(inspectable at <https://live.blockcypher.com/dash/decodetx/>)
+(inspect at <https://live.blockcypher.com/dash/decodetx/>)
 
 ```txt
 030000000187ab81e88e2c19ca354f33f14d5b43b60d171ac851eb97dddd271b510cadbdb0000000
